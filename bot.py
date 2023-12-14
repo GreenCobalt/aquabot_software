@@ -172,4 +172,4 @@ if __name__ == '__main__':
     while True:
         angles = mpu.compFilter()
         #print(" R: " + str(round(angles[0],1)) + " P: " + str(round(angles[1],1)))
-        print(motors.calcAngleCorrection(angles[0], 90))
+        print(90, angles[0], motors.calcAngleCorrection(angles[0], 90))
