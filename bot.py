@@ -131,6 +131,7 @@ class THRUST:
     def __init__(self, pins=[5,6,7,8,9,10,11,12]):
         print("Initializing motors on pins 5-12")
         self.angleTolerance = 5
+        self.correctionAgressiveness = 100
 
         for pin in pins:
             pi.set_mode(pin, pigpio.OUTPUT)
@@ -172,4 +173,4 @@ if __name__ == '__main__':
     while True:
         angles = mpu.compFilter()
         #print(" R: " + str(round(angles[0],1)) + " P: " + str(round(angles[1],1)))
-        print(90, angles[0], motors.calcAngleCorrection(angles[0], 90))
+        print(math.pow(100, motors.calcAngleCorrection(angles[0], 90)))
