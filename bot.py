@@ -141,7 +141,7 @@ class THRUST:
 
     def calcAngleCorrection(self, angle, desiredAngle):
         if (abs(desiredAngle - angle) > self.angleTolerance):
-            return self.translate(desiredAngle - angle, -90, 90, -1, 1)
+            return self.translate(desiredAngle - angle, -180, 180, -1, 1)
         else:
             return 0
         
