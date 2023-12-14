@@ -161,8 +161,8 @@ class CLAW:
 if __name__ == '__main__':
     # 250, 500, 1000, 2000 [deg/s]
     # 2, 4, 7, 16 [g]
-    mpu = MPU(2000, 16, 0.98)
-    mpu.calibrateGyro(500)
+    mpu = MPU(250, 2, 0.98)
+    mpu.calibrateGyro(100)
 
     motors = THRUST()
     claw = CLAW()
