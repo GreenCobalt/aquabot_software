@@ -25,7 +25,7 @@ class MPU:
         self.gyroScaleFactor, self.gyroHex = self.gyroSensitivity(gyro)
         self.accScaleFactor, self.accHex = self.accelerometerSensitivity(acc)
 
-        self.bus = smbus.SMBus(1)
+        self.bus = smbus.SMBus(0)
         self.address = 0x68
 
     def gyroSensitivity(self, x):
