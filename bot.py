@@ -159,6 +159,9 @@ class CLAW:
         pi.set_mode(pin, pigpio.OUTPUT)
         pi.set_servo_pulsewidth(pin, 1500)
         
+def calc(x):
+    return (100*x*x) / ((2*(x*x - x)) + 1)
+
 if __name__ == '__main__':
     # 250, 500, 1000, 2000 [deg/s]
     # 2, 4, 7, 16 [g]
@@ -173,4 +176,4 @@ if __name__ == '__main__':
     while True:
         angles = mpu.compFilter()
         #print(" R: " + str(round(angles[0],1)) + " P: " + str(round(angles[1],1)))
-        print(math.pow(100, motors.calcAngleCorrection(angles[0], 90)))
+        print(calc(motors.calcAngleCorrection(angles[0], 90)))
