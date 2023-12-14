@@ -1,7 +1,5 @@
-import smbus
-import math
-import time
-import pigpio
+import smbus, pigpio, math, time
+pi = pigpio.pi()
 
 class MPU:
     def __init__(self, gyro, acc, tau):
@@ -154,14 +152,19 @@ class MPU:
 class THRUST:
     def __init__(self, pins=[5,6,7,8,9,10,11,12]):
         print("Initializing motors on pins 5-12")
-        self.pi = pigpio.pi()
         for pin in pins:
-            self.pi.set_mode(pin, pigpio.OUTPUT)
-            self.pi.set_servo_pulsewidth(pin, 1500)
+            pi.set_mode(pin, pigpio.OUTPUT)
+            pi.set_servo_pulsewidth(pin, 1500)
+
+    def setOutput(self, pin, speed):
+        pi.set_servo_pulsewidth(pin, speed)
+
         
 class CLAW:
-    def __init__(self):
+    def __init__(self, pin=13):
         print("Initializing claw on pin 13")
+        pi.set_mode(pin, pigpio.OUTPUT)
+        pi.set_servo_pulsewidth(pin, 1500)
         
 if __name__ == '__main__':
     # 250, 500, 1000, 2000 [deg/s]
@@ -173,6 +176,10 @@ if __name__ == '__main__':
     motors = THRUST()
     claw = CLAW()
 
+    motors.setOutput(5, 1550)
+    desiredAngle = 10
+
     while True:
         angles = mpu.compFilter()
-        print(" R: " + str(round(angles[0],1)) + " P: " + str(round(angles[1],1)))
+        #print(" R: " + str(round(angles[0],1)) + " P: " + str(round(angles[1],1)))
+        print((desiredAngle - angles[0]) * 100)
