@@ -152,12 +152,26 @@ class MPU:
 class THRUST:
     def __init__(self, pins=[5,6,7,8,9,10,11,12]):
         print("Initializing motors on pins 5-12")
+        self.angleTolerance = 5
+
         for pin in pins:
             pi.set_mode(pin, pigpio.OUTPUT)
             pi.set_servo_pulsewidth(pin, 1500)
 
     def setOutput(self, pin, speed):
         pi.set_servo_pulsewidth(pin, speed)
+
+    def calcAngleCorrection(self, angle, desiredAngle):
+        if ((desiredAngle - angle) > self.angleTolerance):
+            return self.translate(desiredAngle - angle, -90, 90, -1, 1)
+        else:
+            return 0
+        
+    def translate(value, leftMin, leftMax, rightMin, rightMax):
+        leftSpan = leftMax - leftMin
+        rightSpan = rightMax - rightMin
+        valueScaled = float(value - leftMin) / float(leftSpan)
+        return rightMin + (valueScaled * rightSpan)
 
         
 class CLAW:
@@ -177,9 +191,8 @@ if __name__ == '__main__':
     claw = CLAW()
 
     motors.setOutput(5, 1550)
-    desiredAngle = 10
 
     while True:
         angles = mpu.compFilter()
         #print(" R: " + str(round(angles[0],1)) + " P: " + str(round(angles[1],1)))
-        print((desiredAngle - angles[0]) * 100)
+        print(motors.calcAngleCorrection(angles[0], 90))
