@@ -162,7 +162,7 @@ class CLAW:
 def calc(x):
     abx = abs(x)
     xsn = x / abx if not x == 0 else 1
-    return xsn * ((-50 * math.cos(2*math.pi*abx) + 50) if (0 < abx and abx < 0.5) else 100)
+    return xsn * ((-50 * math.cos(2*math.pi*abx) + 50) if (0 <= abx and abx <= 0.5) else 100)
 
 if __name__ == '__main__':
     # 250, 500, 1000, 2000 [deg/s]
