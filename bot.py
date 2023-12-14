@@ -160,7 +160,7 @@ class CLAW:
         pi.set_servo_pulsewidth(pin, 1500)
         
 def calc(x):
-    return (100*x*x) / ((2*(x*x - x)) + 1)
+    return 50 + ((100*x*x) / ((2*(x*x - x)) + 1))
 
 if __name__ == '__main__':
     # 250, 500, 1000, 2000 [deg/s]
