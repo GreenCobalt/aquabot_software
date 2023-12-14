@@ -27,6 +27,10 @@ class MPU:
         self.bus = smbus.SMBus(0)
         self.address = 0x68
 
+        self.bus.write_byte_data(self.address, 0x6B, 0x00)
+        self.bus.write_byte_data(self.address, 0x1C, self.accHex)
+        self.bus.write_byte_data(self.address, 0x1B, self.gyroHex)
+
     def gyroSensitivity(self, x):
         # Create dictionary with standard value of 500 deg/s
         return {
@@ -44,22 +48,6 @@ class MPU:
             8:  [4096.0,  0x10],
             16: [2048.0,  0x18]
         }.get(x,[8192.0,  0x08])
-
-    def setUp(self):
-        # Activate the MPU-6050
-        self.bus.write_byte_data(self.address, 0x6B, 0x00)
-
-        # Configure the accelerometer
-        self.bus.write_byte_data(self.address, 0x1C, self.accHex)
-
-        # Configure the gyro
-        self.bus.write_byte_data(self.address, 0x1B, self.gyroHex)
-
-        # Display message to user
-        print("MPU set up:")
-        print('\tAccelerometer: ' + str(self.accHex) + ' ' + str(self.accScaleFactor))
-        print('\tGyro: ' + str(self.gyroHex) + ' ' + str(self.gyroScaleFactor) + "\n")
-        time.sleep(2)
 
     def eightBit2sixteenBit(self, reg):
         # Reads high and low 8 bit values and shifts them into 16 bit
@@ -83,27 +71,17 @@ class MPU:
         self.az = self.eightBit2sixteenBit(0x3F)
 
     def calibrateGyro(self, N):
-        # Display message
         print("Calibrating gyro with " + str(N) + " points. Do not move!")
 
-        # Take N readings for each coordinate and add to itself
         for ii in range(N):
             self.getRawData()
             self.gyroXcal += self.gx
             self.gyroYcal += self.gy
             self.gyroZcal += self.gz
-
-        # Find average offset value
         self.gyroXcal /= N
         self.gyroYcal /= N
         self.gyroZcal /= N
 
-        # Display message and restart timer for comp filter
-        print("Calibration complete")
-        print("\tX axis offset: " + str(round(self.gyroXcal,1)))
-        print("\tY axis offset: " + str(round(self.gyroYcal,1)))
-        print("\tZ axis offset: " + str(round(self.gyroZcal,1)) + "\n")
-        time.sleep(2)
         self.dtTimer = time.time()
 
     def processIMUvalues(self):
@@ -184,7 +162,6 @@ if __name__ == '__main__':
     # 250, 500, 1000, 2000 [deg/s]
     # 2, 4, 7, 16 [g]
     mpu = MPU(2000, 16, 0.98)
-    mpu.setUp()
     mpu.calibrateGyro(500)
 
     motors = THRUST()
