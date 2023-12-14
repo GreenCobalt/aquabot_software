@@ -1,6 +1,7 @@
 import smbus
 import math
 import time
+import pigpio
 
 class MPU:
     def __init__(self, gyro, acc, tau):
@@ -151,11 +152,15 @@ class MPU:
         return [self.roll, self.pitch, self.yaw]
            
 class THRUST:
-    def __init__():
+    def __init__(self, pins=[5,6,7,8,9,10,11,12]):
         print("Initializing motors on pins 5-12")
+        self.pi = pigpio.pi()
+        for pin in pins:
+            self.pi.set_mode(pin, pigpio.OUTPUT)
+            self.pi.set_servo_pulsewidth(pin, 1500)
         
 class CLAW:
-    def __init__():
+    def __init__(self):
         print("Initializing claw on pin 13")
         
 if __name__ == '__main__':
