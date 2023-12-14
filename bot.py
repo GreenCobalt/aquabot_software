@@ -150,7 +150,7 @@ class MPU:
 
         return [self.roll, self.pitch, self.yaw]
            
-class MOTOR:
+class THRUST:
     def __init__():
         print("Initializing motors on pins 5-12")
         
@@ -162,12 +162,12 @@ if __name__ == '__main__':
     # 250, 500, 1000, 2000 [deg/s]
     # 2, 4, 7, 16 [g]
     mpu = MPU(2000, 16, 0.98)
-    
     mpu.setUp()
     mpu.calibrateGyro(500)
 
+    motors = THRUST()
+    claw = CLAW()
+
     while True:
         angles = mpu.compFilter()
-        
-        print(" R: " + str(round(angles[0],1)) \
-            + " P: " + str(round(angles[1],1))")
+        print(" R: " + str(round(angles[0],1)) + " P: " + str(round(angles[1],1)))
