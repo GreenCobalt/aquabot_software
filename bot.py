@@ -140,7 +140,7 @@ class THRUST:
         pi.set_servo_pulsewidth(pin, speed)
 
     def calcAngleCorrection(self, angle, desiredAngle):
-        if ((desiredAngle - angle) > self.angleTolerance):
+        if (abs(desiredAngle - angle) > self.angleTolerance):
             return self.translate(desiredAngle - angle, -90, 90, -1, 1)
         else:
             return 0
