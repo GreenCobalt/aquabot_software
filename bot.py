@@ -6,7 +6,9 @@ if not DEBUG:
 
 import math, time
 import numpy as np
+
 from flask import Flask
+import threading
 
 class MPU:
     def __init__(self, gyro, acc, tau):
@@ -185,7 +187,7 @@ if __name__ == '__main__':
         mpu.calibrateGyro(100)
         motors = THRUST()
         claw = CLAW()
-    app.run(debug=True, host='0.0.0.0', port=80)
+    threading.Thread(target=lambda: app.run(debug=False, host='0.0.0.0', port=80, use_reloader=False)).start()
 
     moveMode = False #True = stabilized
     dVel = np.array([0, 0, 0])
