@@ -1,4 +1,4 @@
-DEBUG = True
+DEBUG = False
 
 if not DEBUG:
     import smbus, pigpio
@@ -6,12 +6,12 @@ if not DEBUG:
 
 import math, time
 import numpy as np
-from http.server import BaseHTTPRequestHandler, HTTPServer
+from flask import Flask
 
 class MPU:
     def __init__(self, gyro, acc, tau):
-        self.gx = None; self.gy = None; self.gz = None;
-        self.ax = None; self.ay = None; self.az = None;
+        self.gx = None; self.gy = None; self.gz = None
+        self.ax = None; self.ay = None; self.az = None
 
         self.gyroXcal = 0
         self.gyroYcal = 0
@@ -166,6 +166,12 @@ class CLAW:
         pi.set_mode(pin, pigpio.OUTPUT)
         pi.set_servo_pulsewidth(pin, 1500)
         
+app = Flask(__name__)
+
+@app.route('/')
+def index():
+    return 'Hello world'
+    
 def calc(x):
     abx = abs(x)
     xsn = x / abx if not x == 0 else 1
@@ -179,6 +185,7 @@ if __name__ == '__main__':
         mpu.calibrateGyro(100)
         motors = THRUST()
         claw = CLAW()
+    app.run(debug=True, host='0.0.0.0')
 
     moveMode = False #True = stabilized
     dVel = np.array([0, 0, 0])
