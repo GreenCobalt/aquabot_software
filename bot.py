@@ -1,5 +1,12 @@
-import smbus, pigpio, math, time
-pi = pigpio.pi()
+DEBUG = True
+
+if not DEBUG:
+    import smbus, pigpio
+    pi = pigpio.pi()
+
+import math, time
+import numpy as np
+from http.server import BaseHTTPRequestHandler, HTTPServer
 
 class MPU:
     def __init__(self, gyro, acc, tau):
@@ -125,7 +132,7 @@ class MPU:
         self.roll = (self.tau)*(self.roll - self.gy*dt) + (1-self.tau)*(accRoll)
         self.pitch = (self.tau)*(self.pitch + self.gx*dt) + (1-self.tau)*(accPitch)
 
-        return [self.roll, self.pitch, self.yaw]
+        return np.array([self.roll, self.pitch, self.yaw])
            
 class THRUST:
     def __init__(self, pins=[5,6,7,8,9,10,11,12]):
@@ -167,15 +174,59 @@ def calc(x):
 if __name__ == '__main__':
     # 250, 500, 1000, 2000 [deg/s]
     # 2, 4, 7, 16 [g]
-    mpu = MPU(250, 2, 0.98)
-    mpu.calibrateGyro(100)
+    if not DEBUG:
+        mpu = MPU(250, 2, 0.98)
+        mpu.calibrateGyro(100)
+        motors = THRUST()
+        claw = CLAW()
 
-    motors = THRUST()
-    claw = CLAW()
+    moveMode = False #True = stabilized
+    dVel = np.array([0, 0, 0])
+    dRot = np.array([0, 0, 0])
+    dClaw = 0
 
-    motors.setOutput(5, 1550)
-
+    INC = 0
     while True:
-        angles = mpu.compFilter()
-        print(" R: " + str(round(angles[0],1)) + " P: " + str(round(angles[1],1)))
-        motors.setOutput(5, 1500 + calc(motors.calcAngleCorrection(angles[0], 90)))
+        if not DEBUG:
+            cRot = mpu.compFilter()
+        else:
+            cRot = np.array([0, 0, 0])
+
+        if moveMode:
+            #stab mode, do not set dRot = cRot, that will be handled physically by motors, DO SET dRot[2] = cRot[2], that is turning, and cannot be stabilized
+            dRot[2] = cRot[2]
+        else:
+            #free mode, set dRot = cRot
+            dRot = np.copy(cRot)
+
+        #controller input here, measure joysticks, buttons, etc
+        #desired angle 30 degrees more than is (in effect, speed of motors)
+        #eg: 
+        dRot[0] = cRot[0] + 10
+        dVel[0] = 1
+
+        #then take diff between dRot and cRot and set motors accordingly to move towards that angle
+        mRot = dRot - cRot
+        mVel = dVel
+
+        #calculate motor values for movement based on mRot and mVel
+        #apply to motors, claw
+        mVals = np.array([1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500])
+        for i,v in enumerate(mVals):
+            #roll adjustment
+            mVals[i] += 400*math.sin((math.pi/360)*mRot[0]) * (1 if i in [1,3,4,6] else -1)
+            mVals[i] += 400*math.sin((math.pi/360)*mRot[1]) * (1 if i in [0,1,4,5] else -1)
+            mVals[i] += 400*math.sin((math.pi/360)*mRot[2]) * (1 if i in [0,1,6,7] else -1)
+
+            mVals[i] += 400*math.sin((math.pi/360)*mVel[0]) * (1 if i in [1,3,5,7] else -1)
+
+
+        print(mVals)
+        
+# all motor (+) points IN to vertical front-back square
+#   0-----------2
+#       1-----------3
+#                   
+#                   
+#   4-----------6
+#       5-----------7
