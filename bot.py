@@ -185,7 +185,7 @@ if __name__ == '__main__':
         mpu.calibrateGyro(100)
         motors = THRUST()
         claw = CLAW()
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=True, host='0.0.0.0', port=80)
 
     moveMode = False #True = stabilized
     dVel = np.array([0, 0, 0])
