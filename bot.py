@@ -20,7 +20,7 @@ while True:
     for i,s in enumerate(CALC.calcMotorVals(MPU.compFilter(), WEB.getControllerValues())):
         print(i, s)
         if not DEBUG:
-            THRUST.setOutput(i, val)
+            THRUST.setOutput(i, s)
 
 # all motor (+) points IN to vertical front-back square
 #           5 ----- 6
