@@ -5,8 +5,8 @@ class CLAW:
             import pigpio
             print("(C) Initializing claw on pin 13")
             self.pi = pigpio.pi()
-            pi.set_mode(pin, pigpio.OUTPUT)
-            pi.set_servo_pulsewidth(pin, 1500)
+            self.pi.set_mode(pin, pigpio.OUTPUT)
+            self.pi.set_servo_pulsewidth(pin, 1500)
 
     def setValue(self, value):
         if not self.DEBUG:
