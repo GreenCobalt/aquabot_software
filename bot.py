@@ -18,7 +18,7 @@ threading.Thread(target=WEB.run, daemon=True).start()
 time.sleep(3)
 while True:
     for i,s in enumerate(CALC.calcMotorVals(MPU.compFilter(), WEB.getControllerValues())):
-        print(i, s)
+        #print(i, s)
         if not DEBUG:
             THRUST.setOutput(i, s)
 
