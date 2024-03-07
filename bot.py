@@ -7,7 +7,7 @@ MPU     = mpu.MPU(          DEBUG, 250, 2, 0.98                     )
 CALC    = calc.CALC(        DEBUG                                   )
 THRUST  = thrust.THRUST(    DEBUG, [ 5, 6, 7, 8, 9, 10, 11, 12 ]    )
 CLAW    = claw.CLAW(        DEBUG, 13                               )
-WEB     = web.WEB(          DEBUG, "0.0.0.0", 5000                  )
+WEB     = web.WEB(          DEBUG, "0.0.0.0", 5001                  )
 CAM     = cam.CAM(          DEBUG, "0.0.0.0", 5002, 0               )
 CALC    = calc.CALC(        DEBUG                                   )
 
