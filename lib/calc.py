@@ -46,14 +46,14 @@ class CALC():
 
         # add controller input
         # (0, 1, 2) => (x, y, z) -> x = look up/down, y = rotate about tube axis, z = rotate compass-like
-        desiredRot[0] += (controllerValues[0][0] - 128) * (180 / 128)
-        desiredRot[1] += (controllerValues[0][1] - 128) * (180 / 128)
+        desiredRot[0] += (controllerValues["axes"]["axis_l"][0] - 128) * (180 / 128)
+        desiredRot[1] += (controllerValues["axes"]["axis_l"][1] - 128) * (180 / 128)
         desiredRot[2] += 0
         actionRot = desiredRot - currentRot
 
         # (0, 1, 2) => (x, y, z) -> x = left/right, y = forward/back, z = rotate compass-like
-        desiredVel[0] += (controllerValues[1][0] - 128) * (180 / 128)
-        desiredVel[1] += (controllerValues[1][1] - 128) * (180 / 128)
+        desiredVel[0] += (controllerValues["axes"]["axis_r"][0] - 128) * (180 / 128)
+        desiredVel[1] += (controllerValues["axes"]["axis_r"][1] - 128) * (180 / 128)
         desiredVel[2] += 0
         actionVel = desiredVel
         
