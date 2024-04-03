@@ -29,7 +29,7 @@ class CALC():
             return 1500
         
     def calcClawVals(self, controllerValues):
-        return 1500 - (400 if controllerValues["button_trigger_l"] else 0) + (400 if controllerValues["button_trigger_r"] else 0)
+        return 1500 - (400 if controllerValues["buttons"]["button_trigger_l"] else 0) + (400 if controllerValues["buttons"]["button_trigger_r"] else 0)
 
     def calcMotorVals(self, mpuCompFilter, controllerValues):
         desiredVel = np.array([0, 0, 0])
