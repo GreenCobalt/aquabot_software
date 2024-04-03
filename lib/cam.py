@@ -14,8 +14,8 @@ class CAM():
             
     def run(self):
         with Device.from_id(self.ID) as cam:
-            cap = VideoCapture(cam)
-            cap.set_format(320, 240, "YUYV")
+            #cap = VideoCapture(cam)
+            #cap.set_format(320, 240, "YUYV")
             while True:
                 client_socket, addr = self.socket.accept()
                 if client_socket:

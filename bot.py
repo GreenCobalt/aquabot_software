@@ -1,4 +1,4 @@
-DEBUG = True
+DEBUG = False
 
 import threading, time
 from lib import mpu, thrust, cam, web, calc, claw
@@ -16,10 +16,10 @@ threading.Thread(target=CAM.run, daemon=True).start()
 threading.Thread(target=WEB.run, daemon=True).start()
 
 while True:
-    for i,s in enumerate(CALC.calcMotorVals(MPU.compFilter(), WEB.getControllerValues())):
-        #print(i, s)
-        if not DEBUG:
+    if not DEBUG:
+        for i,s in enumerate(CALC.calcMotorVals(MPU.compFilter(), WEB.getControllerValues())):
             THRUST.setOutput(i, s)
+        CLAW.setValue(CALC.calcClawVals(WEB.getControllerValues()))
 
 # all motor (+) points IN to vertical front-back square
 #           5 ----- 6
