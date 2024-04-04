@@ -14,7 +14,7 @@ class DEPTH:
             
             print("(D) Initializing Depth Sensor")
             self.sensor = ms5837.MS5837_30BA(0)
-            if not sensor.init():
+            if not self.sensor.init():
                 print("Sensor could not be initialized")
             self.sensor.setFluidDensity(1000)
             print("(D) Done")
