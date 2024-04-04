@@ -19,7 +19,7 @@ class DEPTH:
             self.sensor.setFluidDensity(1000)
             print("(D) Done")
 
-    def run():
+    def run(self):
         while True:
             if self.sensor.read():
                 self.sensorVals = {
@@ -29,6 +29,6 @@ class DEPTH:
                 }
             time.sleep(0.1)
 
-    def getVals():
+    def getVals(self):
         return self.sensorVals
         
