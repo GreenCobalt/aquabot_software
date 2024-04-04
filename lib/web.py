@@ -38,6 +38,8 @@ class WEB():
     def run(self):
         self.server.run_forever()
 
-    def getControllerValues(self, depth):
-        self.depth = depth
+    def getControllerValues(self):
         return self.controller_values
+
+    def setDepthValues(self, values):
+        self.depth = values

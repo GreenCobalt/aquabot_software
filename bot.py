@@ -21,7 +21,8 @@ threading.Thread(target=WEB.run, daemon=True).start()
 
 while True:
     if not DEBUG:
-        for i,s in enumerate(CALC.calcMotorVals(MPU.compFilter(), WEB.getControllerValues(DEPTH.getVals()))):
+        WEB.setDepthValues(DEPTH.getVals())
+        for i,s in enumerate(CALC.calcMotorVals(MPU.compFilter(), WEB.getControllerValues())):
             THRUST.setOutput(i, s)
         CLAW.setValue(CALC.calcClawVals(WEB.getControllerValues()))
 
