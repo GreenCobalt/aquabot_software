@@ -3,7 +3,7 @@ import numpy as np
 class CALC():
     def __init__(self, DEBUG):
         self.DEBUG = DEBUG
-        self.moveMode = True #True = stabilized
+        self.moveMode = False #True = stabilized
         self.motorDeadZone = 10
 
     def setMoveMove(self, value):
