@@ -17,7 +17,6 @@ MPU.calibrateGyro(100)
 threading.Thread(target=CAM1.run, daemon=True).start()
 threading.Thread(target=CAM2.run, daemon=True).start()
 threading.Thread(target=WEB.run, daemon=True).start()
-threading.Thread(target=WEB.run, daemon=True).start()
 
 while True:
     if not DEBUG:
